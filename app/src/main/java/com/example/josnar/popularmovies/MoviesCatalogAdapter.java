@@ -83,17 +83,22 @@ class MoviesCatalogAdapter extends RecyclerView.Adapter<MoviesCatalogAdapter.Mov
         return mMovieItemList.size();
     }
 
-    void populate() {
+    void populate(final MovieCatalogActivity.TYPE_ORDER type_order) {
         new AsyncTask<Void, Void, String>() {
 
             String API_BASE_URL = "http://api.themoviedb.org/3";
             String API_TOP_RATED_ENDPOINT = "/movie/top_rated";
+            String API_POPULAR_ENDPOINT = "/movie/popular";
             String API_KEY_PARAM = "?api_key=";
 
             @Override
             protected String doInBackground(Void... params) {
                 RequestQueue queue = Volley.newRequestQueue(mContext);
-                String url = API_BASE_URL + API_TOP_RATED_ENDPOINT + API_KEY_PARAM + PrivateData.THE_MOVIE_DB_API_KEY;
+                String endpoint = API_POPULAR_ENDPOINT;
+                if (type_order == MovieCatalogActivity.TYPE_ORDER.TOP_RATED)
+                    endpoint = API_TOP_RATED_ENDPOINT;
+
+                String url = API_BASE_URL + endpoint + API_KEY_PARAM + PrivateData.THE_MOVIE_DB_API_KEY;
 
                 StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                         new Response.Listener<String>() {
@@ -106,6 +111,7 @@ class MoviesCatalogAdapter extends RecyclerView.Adapter<MoviesCatalogAdapter.Mov
                                     e.printStackTrace();
                                 }
                                 populateMoviesCatalog(jsonObject);
+                                notifyDataSetChanged();
                             }
                     }, new Response.ErrorListener() {
                     @Override
