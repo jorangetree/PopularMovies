@@ -22,8 +22,8 @@ public class MovieCatalogActivity extends AppCompatActivity {
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
 
-        mMoviesCatalogAdapter = new MoviesCatalogAdapter();
+        mMoviesCatalogAdapter = new MoviesCatalogAdapter(this);
         mRecyclerView.setAdapter(mMoviesCatalogAdapter);
-        mMoviesCatalogAdapter.populate(this);
+        mMoviesCatalogAdapter.populate();
     }
 }
