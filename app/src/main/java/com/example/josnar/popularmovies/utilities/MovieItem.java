@@ -1,8 +1,13 @@
 package com.example.josnar.popularmovies.utilities;
 
 
-public class MovieItem {
+import java.io.Serializable;
+
+public class MovieItem implements Serializable {
     public int id;
     public String posterPath;
     public String originalTitle;
+    public String releaseDate;
+    public Double voteAverage;
+    public String plotSynopsis;
 }

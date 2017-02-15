@@ -14,7 +14,7 @@ public class MovieCatalogActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private MoviesCatalogAdapter mMoviesCatalogAdapter;
 
-    enum  TYPE_ORDER { TOP_RATED, MOST_POPULAR };
+    enum  TYPE_ORDER { TOP_RATED, MOST_POPULAR }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

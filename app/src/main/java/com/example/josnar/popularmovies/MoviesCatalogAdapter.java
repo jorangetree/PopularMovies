@@ -1,14 +1,13 @@
 package com.example.josnar.popularmovies;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -18,26 +17,22 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.josnar.popularmovies.data.PrivateData;
 import com.example.josnar.popularmovies.utilities.MovieItem;
-import com.example.josnar.popularmovies.utilities.MoviesCatalogDataMock;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 class MoviesCatalogAdapter extends RecyclerView.Adapter<MoviesCatalogAdapter.MoviesCatalogAdapterViewHolder> {
     private Context mContext;
     private List<MovieItem> mMovieItemList;
-    private String mBaseImageURL;
+    static String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/w500";
 
     MoviesCatalogAdapter(Context context) {
         mContext = context;
-        // TODO: Provisional. Code above this line must be removed and call the configuration endpoint of the API
-        mBaseImageURL = "http://image.tmdb.org/t/p/w500";
     }
 
     private void populateMoviesCatalog(JSONObject jsonData) {
@@ -50,6 +45,9 @@ class MoviesCatalogAdapter extends RecyclerView.Adapter<MoviesCatalogAdapter.Mov
                 item.id = movies.getJSONObject(i).getInt("id");
                 item.originalTitle = movies.getJSONObject(i).getString("original_title");
                 item.posterPath = movies.getJSONObject(i).getString("poster_path");
+                item.releaseDate = movies.getJSONObject(i).getString("release_date");
+                item.voteAverage = movies.getJSONObject(i).getDouble("vote_average");
+                item.plotSynopsis = movies.getJSONObject(i).getString("overview");
                 mMovieItemList.add(item);
             }
         } catch (JSONException e) {
@@ -68,8 +66,16 @@ class MoviesCatalogAdapter extends RecyclerView.Adapter<MoviesCatalogAdapter.Mov
     }
 
     @Override
-    public void onBindViewHolder(MoviesCatalogAdapterViewHolder holder, int position) {
-        Picasso.with(mContext).load(mBaseImageURL + mMovieItemList.get(position).posterPath).into(holder.mMovieImageView);
+    public void onBindViewHolder(final MoviesCatalogAdapterViewHolder holder, int position) {
+        Picasso.with(mContext).load(BASE_IMAGE_URL + mMovieItemList.get(position).posterPath).into(holder.mMovieImageView);
+        holder.mMovieImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, MovieDetailsActivity.class);
+                intent.putExtra("movie_details", mMovieItemList.get(holder.getAdapterPosition()));
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -134,4 +140,5 @@ class MoviesCatalogAdapter extends RecyclerView.Adapter<MoviesCatalogAdapter.Mov
             mMovieImageView = (ImageView) itemView.findViewById(R.id.movie_image_view);
         }
     }
+
 }
