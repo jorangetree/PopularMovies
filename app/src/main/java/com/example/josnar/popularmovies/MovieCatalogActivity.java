@@ -11,10 +11,11 @@ import android.view.MenuItem;
 
 public class MovieCatalogActivity extends AppCompatActivity {
 
+    enum  TYPE_ORDER { TOP_RATED, MOST_POPULAR }
+
     private RecyclerView mRecyclerView;
     private MoviesCatalogAdapter mMoviesCatalogAdapter;
-
-    enum  TYPE_ORDER { TOP_RATED, MOST_POPULAR }
+    private static TYPE_ORDER mOrder = TYPE_ORDER.TOP_RATED;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +29,7 @@ public class MovieCatalogActivity extends AppCompatActivity {
 
         mMoviesCatalogAdapter = new MoviesCatalogAdapter(this);
         mRecyclerView.setAdapter(mMoviesCatalogAdapter);
-        mMoviesCatalogAdapter.populate(TYPE_ORDER.TOP_RATED);
+        mMoviesCatalogAdapter.populate(mOrder);
     }
 
     @Override
@@ -41,9 +42,11 @@ public class MovieCatalogActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.top_rated)
-            mMoviesCatalogAdapter.populate(TYPE_ORDER.TOP_RATED);
+            mOrder = TYPE_ORDER.TOP_RATED;
         else
-            mMoviesCatalogAdapter.populate(TYPE_ORDER.MOST_POPULAR);
+            mOrder = TYPE_ORDER.MOST_POPULAR;
+
+        mMoviesCatalogAdapter.populate(mOrder);
         return super.onOptionsItemSelected(item);
     }
 }
