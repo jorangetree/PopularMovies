@@ -35,6 +35,5 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         TextView plotSynopsisTextView = (TextView) findViewById(R.id.movie_details_plot_synopsis_text_view);
         plotSynopsisTextView.setText(movieItem.plotSynopsis);
-        plotSynopsisTextView.setMovementMethod(new ScrollingMovementMethod());
     }
 }
