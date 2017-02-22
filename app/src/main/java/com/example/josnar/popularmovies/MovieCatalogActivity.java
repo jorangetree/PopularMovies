@@ -1,5 +1,7 @@
 package com.example.josnar.popularmovies;
 
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -9,9 +11,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-public class MovieCatalogActivity extends AppCompatActivity {
+import com.example.josnar.popularmovies.network.MovieCatalogLoader;
 
-    enum  TYPE_ORDER { TOP_RATED, MOST_POPULAR }
+import org.json.JSONObject;
+
+public class MovieCatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<JSONObject> {
+
+    private static final int MOVIE_CATALOG_LOADER = 0;
+
+    public enum  TYPE_ORDER { TOP_RATED, MOST_POPULAR }
 
     private RecyclerView mRecyclerView;
     private MoviesCatalogAdapter mMoviesCatalogAdapter;
@@ -29,7 +37,8 @@ public class MovieCatalogActivity extends AppCompatActivity {
 
         mMoviesCatalogAdapter = new MoviesCatalogAdapter(this);
         mRecyclerView.setAdapter(mMoviesCatalogAdapter);
-        mMoviesCatalogAdapter.populate(mOrder);
+
+        getSupportLoaderManager().initLoader(MOVIE_CATALOG_LOADER, null, this);
     }
 
     @Override
@@ -46,7 +55,22 @@ public class MovieCatalogActivity extends AppCompatActivity {
         else
             mOrder = TYPE_ORDER.MOST_POPULAR;
 
-        mMoviesCatalogAdapter.populate(mOrder);
+        getSupportLoaderManager().restartLoader(MOVIE_CATALOG_LOADER, null, this);
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public Loader onCreateLoader(int id, Bundle args) {
+        return new MovieCatalogLoader(this, mOrder);
+    }
+
+    @Override
+    public void onLoadFinished(Loader loader, JSONObject data) {
+        mMoviesCatalogAdapter.populateMoviesCatalog(data);
+        mMoviesCatalogAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onLoaderReset(Loader loader) {
     }
 }

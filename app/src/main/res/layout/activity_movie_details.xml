@@ -66,6 +66,11 @@
         android:id="@+id/movie_details_plot_synopsis_text_view"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:padding="16dp" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></LinearLayout>
 </LinearLayout>
 
 </ScrollView>
