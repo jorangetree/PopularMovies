@@ -74,6 +74,5 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
 
     @Override
     public void onLoaderReset(Loader<JSONObject> loader) {
-
     }
 }

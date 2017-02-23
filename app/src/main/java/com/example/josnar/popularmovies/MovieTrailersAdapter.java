@@ -24,6 +24,7 @@ public class MovieTrailersAdapter extends ArrayAdapter<TrailerItem> implements A
     }
 
     public void populateTrailerList(JSONObject jsonData) {
+        clear();
         JSONArray trailers;
         try {
             trailers = jsonData.getJSONArray("results");
