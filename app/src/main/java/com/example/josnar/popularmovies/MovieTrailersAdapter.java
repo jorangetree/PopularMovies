@@ -38,7 +38,6 @@ public class MovieTrailersAdapter extends ArrayAdapter<TrailerItem> implements A
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     @NonNull
