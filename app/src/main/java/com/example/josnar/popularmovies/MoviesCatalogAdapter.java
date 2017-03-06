@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.josnar.popularmovies.utilities.MovieItem;
+import com.example.josnar.popularmovies.model.MovieItem;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;

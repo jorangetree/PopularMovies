@@ -1,4 +1,4 @@
-package com.example.josnar.popularmovies.utilities;
+package com.example.josnar.popularmovies.model;
 
 
 import java.io.Serializable;
@@ -11,5 +11,4 @@ public class MovieItem implements Serializable {
     public String releaseDate;
     public Double voteAverage;
     public String plotSynopsis;
-    public List<String> trailers;
 }

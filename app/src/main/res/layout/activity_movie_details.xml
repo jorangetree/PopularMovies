@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView android:layout_width="match_parent"
+<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android">
@@ -19,18 +20,22 @@
         android:layout_height="wrap_content"
         android:id="@+id/movie_details_title_text_view"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/white"
+        android:padding="10dp" />
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
 
         <ImageView
             android:layout_height="wrap_content"
             app:srcCompat="@android:drawable/ic_menu_gallery"
             android:id="@+id/movie_details_poster_image_view"
-            android:layout_weight="1"
+            android:layout_weight="0.65"
             android:layout_width="wrap_content"
             android:adjustViewBounds="false" />
 
@@ -54,8 +59,16 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/movie_details_average_rate_text_view"
                 android:layout_weight="1"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display4"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display3"
                 android:textAlignment="center" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@android:drawable/star_big_off"
+                android:id="@+id/favorite_image_button"
+                android:layout_weight="1"
+                android:layout_gravity="center" />
         </LinearLayout>
 
     </LinearLayout>

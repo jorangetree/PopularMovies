@@ -1,4 +1,4 @@
-package com.example.josnar.popularmovies.utilities;
+package com.example.josnar.popularmovies.model;
 
 
 public class ReviewItem {

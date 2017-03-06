@@ -1,16 +1,21 @@
 package com.example.josnar.popularmovies;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.josnar.popularmovies.model.FavouriteFilmsContract;
 import com.example.josnar.popularmovies.network.MovieDetailsTrailersLoader;
 import com.example.josnar.popularmovies.network.MovieDetailsReviewsLoader;
-import com.example.josnar.popularmovies.utilities.MovieItem;
+import com.example.josnar.popularmovies.model.MovieItem;
 import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
 import com.squareup.picasso.Picasso;
 
@@ -26,9 +31,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private MovieTrailersAdapter mMovieTrailersAdapter;
     private MovieReviewsAdapter mMovieReviewsAdapter;
 
-    private LoaderManager.LoaderCallbacks<JSONObject> mMovieTrailersLoader;
-    private LoaderManager.LoaderCallbacks<JSONObject> mMovieReviewsLoader;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,29 +43,51 @@ public class MovieDetailsActivity extends AppCompatActivity {
         titleTextView.setText(mMovieItem.originalTitle);
 
         ImageView posterImageView = (ImageView) findViewById(R.id.movie_details_poster_image_view);
-        Picasso.with(this).load(MoviesCatalogAdapter.BASE_IMAGE_URL + mMovieItem.posterPath).into(posterImageView);
+        Picasso.with(this).load(
+                MoviesCatalogAdapter.BASE_IMAGE_URL + mMovieItem.posterPath).into(posterImageView);
 
-        TextView releaseDateTextView = (TextView) findViewById(R.id.movie_details_release_date_text_view);
+        TextView releaseDateTextView =
+                (TextView) findViewById(R.id.movie_details_release_date_text_view);
         releaseDateTextView.setText(mMovieItem.releaseDate);
 
-        TextView averageRateTextView = (TextView) findViewById(R.id.movie_details_average_rate_text_view);
+        TextView averageRateTextView =
+                (TextView) findViewById(R.id.movie_details_average_rate_text_view);
         averageRateTextView.setText(mMovieItem.voteAverage.toString());
 
-        TextView plotSynopsisTextView = (TextView) findViewById(R.id.movie_details_plot_synopsis_text_view);
+        TextView plotSynopsisTextView =
+                (TextView) findViewById(R.id.movie_details_plot_synopsis_text_view);
         plotSynopsisTextView.setText(mMovieItem.plotSynopsis);
 
+        final ImageView favouriteImageButton = (ImageView) findViewById(R.id.favorite_image_button);
+        favouriteImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(FavouriteFilmsContract.FavouriteFilmsEntry.COLUMN_ID,
+                        mMovieItem.id);
+                Uri uri = getContentResolver().insert(
+                        FavouriteFilmsContract.FavouriteFilmsEntry.CONTENT_URI, contentValues);
+                if (uri != null) {
+                    Toast.makeText(
+                            getBaseContext(), "New favourite movie!", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
         mMovieTrailersAdapter = new MovieTrailersAdapter(this, R.layout.trailer_item);
-        ExpandableHeightListView trailerListView = (ExpandableHeightListView) findViewById(R.id.trailer_list_view);
+        ExpandableHeightListView trailerListView =
+                (ExpandableHeightListView) findViewById(R.id.trailer_list_view);
         trailerListView.setAdapter(mMovieTrailersAdapter);
         trailerListView.setExpanded(true);
         trailerListView.setOnItemClickListener(mMovieTrailersAdapter);
 
         mMovieReviewsAdapter = new MovieReviewsAdapter(this, R.layout.review_item);
-        ExpandableHeightListView reviewListView = (ExpandableHeightListView) findViewById(R.id.review_list_view);
+        ExpandableHeightListView reviewListView =
+                (ExpandableHeightListView) findViewById(R.id.review_list_view);
         reviewListView.setAdapter(mMovieReviewsAdapter);
         reviewListView.setExpanded(true);
 
-        mMovieTrailersLoader = new LoaderManager.LoaderCallbacks<JSONObject>() {
+        LoaderManager.LoaderCallbacks<JSONObject> movieTrailersLoader = new LoaderManager.LoaderCallbacks<JSONObject>() {
             @Override
             public Loader<JSONObject> onCreateLoader(int id, Bundle args) {
                 return new MovieDetailsTrailersLoader(getBaseContext(), mMovieItem.id);
@@ -77,11 +101,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
             @Override
             public void onLoaderReset(Loader<JSONObject> loader) {
-
             }
         };
 
-        mMovieReviewsLoader = new LoaderManager.LoaderCallbacks<JSONObject>() {
+        LoaderManager.LoaderCallbacks<JSONObject> movieReviewsLoader = new LoaderManager.LoaderCallbacks<JSONObject>() {
             @Override
             public Loader<JSONObject> onCreateLoader(int id, Bundle args) {
                 return new MovieDetailsReviewsLoader(getBaseContext(), mMovieItem.id);
@@ -99,8 +122,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
             }
         };
 
-        getSupportLoaderManager().initLoader(TRAILER_LIST_LOADER, null, mMovieTrailersLoader);
-        getSupportLoaderManager().initLoader(REVIEW_LIST_LOADER, null, mMovieReviewsLoader);
+        getSupportLoaderManager().initLoader(TRAILER_LIST_LOADER, null, movieTrailersLoader);
+        getSupportLoaderManager().initLoader(REVIEW_LIST_LOADER, null, movieReviewsLoader);
     }
 
 }

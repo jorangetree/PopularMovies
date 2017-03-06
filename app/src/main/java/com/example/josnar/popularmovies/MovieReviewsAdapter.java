@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.example.josnar.popularmovies.utilities.ReviewItem;
+import com.example.josnar.popularmovies.model.ReviewItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -4,4 +4,11 @@
     <string name="title_top_rated">Top Rated</string>
     <string name="title_popular">Most Popular</string>
     <string name="movie_details_name">Movie Details</string>
+    <string name="title_favourites">Favourites</string>
+    <string name="API_BASE_URL">http://api.themoviedb.org/3</string>
+    <string name="API_TOP_RATED_ENDPOINT">/movie/top_rated</string>
+    <string name="API_POPULAR_ENDPOINT">/movie/popular</string>
+    <string name="API_MOVIE_ENDPOINT">/movie/</string>
+    <string name="API_KEY_PARAM">\?api_key=</string>
+
 </resources>

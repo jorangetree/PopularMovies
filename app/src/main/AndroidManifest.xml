@@ -17,10 +17,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MovieDetailsActivity"
+        <activity
+            android:name=".MovieDetailsActivity"
             android:label="@string/movie_details_name"
-            android:parentActivityName="com.example.josnar.popularmovies.MovieCatalogActivity" >
-        </activity>
+            android:parentActivityName=".MovieCatalogActivity"></activity>
+
+        <provider
+            android:name=".FavouriteFilmsContentProvider"
+            android:authorities="com.example.josnar.favouritefilmscontentprovider"
+            android:enabled="true"
+            android:exported="true"></provider>
     </application>
 
 </manifest>

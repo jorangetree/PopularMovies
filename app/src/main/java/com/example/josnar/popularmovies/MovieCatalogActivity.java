@@ -18,7 +18,7 @@ public class MovieCatalogActivity extends AppCompatActivity implements LoaderMan
 
     private static final int MOVIE_CATALOG_LOADER = 0;
 
-    public enum  TYPE_ORDER { TOP_RATED, MOST_POPULAR }
+    public enum  TYPE_ORDER { TOP_RATED, MOST_POPULAR, FAVOURITES }
 
     private RecyclerView mRecyclerView;
     private MoviesCatalogAdapter mMoviesCatalogAdapter;
@@ -49,10 +49,19 @@ public class MovieCatalogActivity extends AppCompatActivity implements LoaderMan
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.top_rated)
-            mOrder = TYPE_ORDER.TOP_RATED;
-        else
-            mOrder = TYPE_ORDER.MOST_POPULAR;
+        switch (item.getItemId()) {
+            case R.id.top_rated:
+                mOrder = TYPE_ORDER.TOP_RATED;
+                break;
+            case R.id.most_popular:
+                mOrder = TYPE_ORDER.MOST_POPULAR;
+                break;
+            case R.id.favourites:
+                mOrder = TYPE_ORDER.FAVOURITES;
+                break;
+            default:
+                // TODO: This should never be reached
+        }
 
         getSupportLoaderManager().restartLoader(MOVIE_CATALOG_LOADER, null, this);
         return super.onOptionsItemSelected(item);
