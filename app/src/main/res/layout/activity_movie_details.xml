@@ -80,14 +80,16 @@
         android:padding="16dp" />
 
     <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+        android:id="@+id/trailer_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/trailer_list_view" />
+        android:layout_margin="16dp" />
 
     <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+        android:id="@+id/review_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/review_list_view" />
+        android:layout_margin="16dp" />
 
 </LinearLayout>
 
