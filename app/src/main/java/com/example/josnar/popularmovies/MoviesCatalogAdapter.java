@@ -18,7 +18,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-class MoviesCatalogAdapter extends RecyclerView.Adapter<MoviesCatalogAdapter.MoviesCatalogAdapterViewHolder>  {
+public class MoviesCatalogAdapter extends RecyclerView.Adapter<MoviesCatalogAdapter.MoviesCatalogAdapterViewHolder>  {
     private Context mContext;
     private List<MovieItem> mMovieItemList;
     static String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/w500";
