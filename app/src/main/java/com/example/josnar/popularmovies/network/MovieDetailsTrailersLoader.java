@@ -9,17 +9,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.josnar.popularmovies.R;
 import com.example.josnar.popularmovies.data.PrivateData;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MovieDetailsTrailersLoader extends Loader<JSONObject> {
-
-    static private String API_BASE_URL = "http://api.themoviedb.org/3";
-    static private String API_MOVIE_ENDPOINT = "/movie/";
-    static private String API_TRAILER_ENDPOINT = "/videos";
-    static private String API_KEY_PARAM = "?api_key=";
 
     private final RequestQueue mRequestQueue;
     private int mMovieId;
@@ -37,7 +33,11 @@ public class MovieDetailsTrailersLoader extends Loader<JSONObject> {
     }
 
     private void makeRequest() {
-        String url = API_BASE_URL + API_MOVIE_ENDPOINT + mMovieId + API_TRAILER_ENDPOINT + API_KEY_PARAM + PrivateData.THE_MOVIE_DB_API_KEY;
+        String url = getContext().getResources().getString(R.string.API_BASE_URL) +
+                getContext().getResources().getString(R.string.API_MOVIE_ENDPOINT) + mMovieId +
+                getContext().getResources().getString(R.string.API_TRAILERS_ENDPOINT) +
+                getContext().getResources().getString(R.string.API_KEY_PARAM) +
+                PrivateData.THE_MOVIE_DB_API_KEY;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
