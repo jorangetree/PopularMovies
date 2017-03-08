@@ -23,7 +23,7 @@
             android:parentActivityName=".MovieCatalogActivity"></activity>
 
         <provider
-            android:name=".FavouriteFilmsContentProvider"
+            android:name=".model.FavouriteFilmsContentProvider"
             android:authorities="com.example.josnar.favouritefilmscontentprovider"
             android:enabled="true"
             android:exported="true"></provider>

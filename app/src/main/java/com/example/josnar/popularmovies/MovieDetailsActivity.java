@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.josnar.popularmovies.model.FavouriteFilmsContract;
+import com.example.josnar.popularmovies.network.FavouritesLoader;
 import com.example.josnar.popularmovies.network.MovieDetailsTrailersLoader;
 import com.example.josnar.popularmovies.network.MovieDetailsReviewsLoader;
 import com.example.josnar.popularmovies.model.MovieItem;
@@ -20,6 +21,8 @@ import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
+
+import java.util.List;
 
 
 public class MovieDetailsActivity extends AppCompatActivity {
@@ -58,21 +61,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 (TextView) findViewById(R.id.movie_details_plot_synopsis_text_view);
         plotSynopsisTextView.setText(mMovieItem.plotSynopsis);
 
-        final ImageView favouriteImageButton = (ImageView) findViewById(R.id.favorite_image_button);
-        favouriteImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ContentValues contentValues = new ContentValues();
-                contentValues.put(FavouriteFilmsContract.FavouriteFilmsEntry.COLUMN_ID,
-                        mMovieItem.id);
-                Uri uri = getContentResolver().insert(
-                        FavouriteFilmsContract.FavouriteFilmsEntry.CONTENT_URI, contentValues);
-                if (uri != null) {
-                    Toast.makeText(
-                            getBaseContext(), "New favourite movie!", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+        setFavouriteButton();
 
         mMovieTrailersAdapter = new MovieTrailersAdapter(this, R.layout.trailer_item);
         ExpandableHeightListView trailerListView =
@@ -124,6 +113,42 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         getSupportLoaderManager().initLoader(TRAILER_LIST_LOADER, null, movieTrailersLoader);
         getSupportLoaderManager().initLoader(REVIEW_LIST_LOADER, null, movieReviewsLoader);
+    }
+
+    private void setFavouriteButton() {
+        final FavouritesLoader favouritesLoader = new FavouritesLoader(getBaseContext());
+        List<Integer> favouritesIdList = favouritesLoader.getAllMovieIds();
+        final ImageView favouriteImageButton = (ImageView) findViewById(R.id.favorite_image_button);
+        if (favouritesIdList.contains(mMovieItem.id)) {
+            favouriteImageButton.setBackgroundResource(R.drawable.ic_favourite);
+        } else {
+            favouriteImageButton.setBackgroundResource(R.drawable.ic_no_favourite);
+        }
+        favouriteImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Integer> favouritesIdList = favouritesLoader.getAllMovieIds();
+                if (favouritesIdList.contains(mMovieItem.id)) {
+                    Uri uri = FavouriteFilmsContract.FavouriteFilmsEntry.CONTENT_URI;
+                    uri = uri.buildUpon().appendPath(Integer.toString(mMovieItem.id)).build();
+                    getContentResolver().delete(uri, null, null);
+                    Toast.makeText(
+                            getBaseContext(), "Favourite removed!", Toast.LENGTH_LONG).show();
+                    favouriteImageButton.setBackgroundResource(R.drawable.ic_no_favourite);
+                } else {
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put(FavouriteFilmsContract.FavouriteFilmsEntry.COLUMN_ID,
+                            mMovieItem.id);
+                    Uri uri = getContentResolver().insert(
+                            FavouriteFilmsContract.FavouriteFilmsEntry.CONTENT_URI, contentValues);
+                    if (uri != null) {
+                        Toast.makeText(
+                                getBaseContext(), "New favourite movie!", Toast.LENGTH_LONG).show();
+                    }
+                    favouriteImageButton.setBackgroundResource(R.drawable.ic_favourite);
+                }
+            }
+        });
     }
 
 }

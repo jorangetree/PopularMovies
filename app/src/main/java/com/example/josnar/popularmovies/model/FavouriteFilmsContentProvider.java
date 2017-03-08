@@ -1,4 +1,4 @@
-package com.example.josnar.popularmovies;
+package com.example.josnar.popularmovies.model;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;

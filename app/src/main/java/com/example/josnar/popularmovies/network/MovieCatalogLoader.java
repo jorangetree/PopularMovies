@@ -89,12 +89,12 @@ public class MovieCatalogLoader extends Loader<JSONObject> {
     }
 
     public void showFavourites() {
-        FavouritesLoader favouritesLoader = new FavouritesLoader(getContext()) {
+        FavouritesLoader favouritesLoader = new FavouritesLoader(getContext());
+        favouritesLoader.load(new FavouritesLoaderCallback() {
             @Override
             public void deliverResult(JSONObject jsonObject) {
                 MovieCatalogLoader.this.deliverResult(jsonObject);
             }
-        };
-        favouritesLoader.startLoading();
+        });
     }
 }

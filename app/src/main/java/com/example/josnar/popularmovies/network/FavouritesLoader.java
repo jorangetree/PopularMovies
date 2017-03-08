@@ -3,7 +3,6 @@ package com.example.josnar.popularmovies.network;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.support.v4.content.Loader;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -23,7 +22,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract class FavouritesLoader implements FavouritesLoaderCallback {
+public class FavouritesLoader {
     private static final String TAG = FavouritesLoader.class.getSimpleName();
 
     private JSONObject mJson;
@@ -33,23 +32,23 @@ abstract class FavouritesLoader implements FavouritesLoaderCallback {
         mContext = context;
     }
 
-    protected void startLoading() {
-        Cursor cursor;
+    public void load(FavouritesLoaderCallback callback) {
+        List<Integer> movieIdList = getAllMovieIds();
+        buildJsonAndDeliver(movieIdList, callback);
+    }
+
+    public List<Integer> getAllMovieIds() {
+        Cursor cursor = null;
         try {
             cursor = mContext.getContentResolver().query(FavouriteFilmsContract.FavouriteFilmsEntry.CONTENT_URI,
                     null,
                     null,
                     null,
                     null);
-            List<Integer> movieIdList = getAllMovieIds(cursor);
-            buildJsonAndDeliver(movieIdList);
         } catch (Exception e) {
             Log.e(TAG, "Failed to asynchronously load data.");
             e.printStackTrace();
         }
-    }
-
-    private List<Integer> getAllMovieIds(Cursor cursor) {
         List<Integer> movieIdList = new ArrayList<>();
         cursor.moveToFirst();
         do {
@@ -60,7 +59,8 @@ abstract class FavouritesLoader implements FavouritesLoaderCallback {
         return movieIdList;
     }
 
-    private void buildJsonAndDeliver(List<Integer> movieIdList) {
+    private void buildJsonAndDeliver(List<Integer> movieIdList, final FavouritesLoaderCallback callback) {
+        final int movieIdListLen = movieIdList.size();
         mJson = new JSONObject();
         final JSONArray resultsJson = new JSONArray();
         try {
@@ -69,14 +69,14 @@ abstract class FavouritesLoader implements FavouritesLoaderCallback {
             e.printStackTrace();
         }
 
-        RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
         for (Integer id: movieIdList) {
             String url = mContext.getResources().getString(R.string.API_BASE_URL) +
                     mContext.getResources().getString(R.string.API_MOVIE_ENDPOINT) + id +
                     mContext.getResources().getString(R.string.API_KEY_PARAM) +
                             PrivateData.THE_MOVIE_DB_API_KEY;
 
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+            final StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -98,7 +98,9 @@ abstract class FavouritesLoader implements FavouritesLoaderCallback {
                                 e.printStackTrace();
                             }
                             resultsJson.put(jsonEntry);
-                            deliverResult(mJson);
+                            if (resultsJson.length() == movieIdListLen) {
+                                callback.deliverResult(mJson);
+                            }
                         }
                     }, new Response.ErrorListener() {
                 @Override
