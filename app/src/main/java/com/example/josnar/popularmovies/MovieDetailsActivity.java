@@ -69,12 +69,14 @@ public class MovieDetailsActivity extends AppCompatActivity {
         trailerListView.setAdapter(mMovieTrailersAdapter);
         trailerListView.setExpanded(true);
         trailerListView.setOnItemClickListener(mMovieTrailersAdapter);
+        trailerListView.setFocusable(false);
 
         mMovieReviewsAdapter = new MovieReviewsAdapter(this, R.layout.review_item);
         ExpandableHeightListView reviewListView =
                 (ExpandableHeightListView) findViewById(R.id.review_list_view);
         reviewListView.setAdapter(mMovieReviewsAdapter);
         reviewListView.setExpanded(true);
+        reviewListView.setFocusable(false);
 
         LoaderManager.LoaderCallbacks<JSONObject> movieTrailersLoader = new LoaderManager.LoaderCallbacks<JSONObject>() {
             @Override

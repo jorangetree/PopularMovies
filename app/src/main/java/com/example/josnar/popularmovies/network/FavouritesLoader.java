@@ -32,7 +32,7 @@ public class FavouritesLoader {
         mContext = context;
     }
 
-    public void load(FavouritesLoaderCallback callback) {
+    public void load(FavouritesLoaderOnFinishedCallback callback) {
         List<Integer> movieIdList = getAllMovieIds();
         buildJsonAndDeliver(movieIdList, callback);
     }
@@ -59,7 +59,7 @@ public class FavouritesLoader {
         return movieIdList;
     }
 
-    private void buildJsonAndDeliver(List<Integer> movieIdList, final FavouritesLoaderCallback callback) {
+    private void buildJsonAndDeliver(List<Integer> movieIdList, final FavouritesLoaderOnFinishedCallback callback) {
         final int movieIdListLen = movieIdList.size();
         mJson = new JSONObject();
         final JSONArray resultsJson = new JSONArray();

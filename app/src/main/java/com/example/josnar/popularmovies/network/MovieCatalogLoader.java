@@ -1,17 +1,7 @@
 package com.example.josnar.popularmovies.network;
 
-import android.app.DownloadManager;
-import android.content.AsyncQueryHandler;
 import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -22,12 +12,9 @@ import com.android.volley.toolbox.Volley;
 import com.example.josnar.popularmovies.MovieCatalogActivity;
 import com.example.josnar.popularmovies.R;
 import com.example.josnar.popularmovies.data.PrivateData;
-import com.example.josnar.popularmovies.model.FavouriteFilmsContract;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.net.URL;
 
 
 public class MovieCatalogLoader extends Loader<JSONObject> {
@@ -90,7 +77,7 @@ public class MovieCatalogLoader extends Loader<JSONObject> {
 
     public void showFavourites() {
         FavouritesLoader favouritesLoader = new FavouritesLoader(getContext());
-        favouritesLoader.load(new FavouritesLoaderCallback() {
+        favouritesLoader.load(new FavouritesLoaderOnFinishedCallback() {
             @Override
             public void deliverResult(JSONObject jsonObject) {
                 MovieCatalogLoader.this.deliverResult(jsonObject);
